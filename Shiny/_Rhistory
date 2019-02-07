@@ -1,0 +1,512 @@
+resource = sample(3:7, size=1, replace = TRUE)
+valFull = task*days*moduleFull
+effortFull = valFull/resource
+arrFull = append(arrFull, effortFull)
+}
+}
+}
+arrFull<-data.frame(arrFull)
+arrPart<-data.frame(arrPart)
+library(shiny); print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+load("C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/final_and_top_25.RData")
+load("C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/final_and_top_25.RData")
+library(shiny); print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+?titlePanel
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+?sidebarPanel
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/shiny1.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+View(top_25_table)
+View(top_25_table)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+class(input$plot1_brush)
+brush <- input$plot1_brush
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+ui <- fluidPage(theme = shinytheme("paper"),
+titlePanel("Cryptocurrency Price Index"),
+sidebarLayout(
+sidebarPanel(
+# Select type of trend to plot
+selectInput(inputId = "type", label = strong("First Cryptocurrency"),
+choices = unique(top_25_table$crypto_name),
+selected = "Bitcoin"),
+selectInput(inputId = "type1", label = strong("Second Cryptocurrency"),
+choices = c('None',unique(top_25_table$crypto_name)),
+),
+# Select date range to be plotted
+dateRangeInput("date", strong("Date range"), start = "2013-04-28", end = "2017-10-30",
+min = "2013-04-28", max = "2017-10-30"),
+bsButton("act","log scale",icon("refresh"),style = "primary",
+type = "toggle",value = F),
+radioButtons("rad","Currency:",list("USD","INR")),
+width = 3
+),
+# Output: Description, lineplot, and reference
+mainPanel(
+plotOutput(outputId = "lineplot", height = "700px",dblclick = "plot1_dblclick",width = "1000px",
+brush = brushOpts(
+id = "plot1_brush",
+resetOnNew = TRUE
+))
+)
+)
+)
+# Define server function
+server <- function(input, output) {
+# Subset data
+selected_trends <- reactive({
+req(input$date)
+req(input$type)
+req(input$type1)
+validate(need(!is.na(input$date[1]) & !is.na(input$date[2]), "Error: Please provide both a start and an end date."))
+validate(need(input$date[1] < input$date[2], "Error: Start date should be earlier than end date."))
+# validate(need(input$type1!=input$type,"Error:Select Different Cryptocurrencies to Compare"))
+top_25_table %>%select(crypto_name,Date,Close)%>%
+filter(Date>as.Date(input$date[1],format="%d-%m-%Y") & Date < as.Date(input$date[2],format="%d-%m-%Y"),crypto_name==input$type|crypto_name==input$type1)
+})
+#Create scatterplot object the plotOutput function is expecting
+ranges <- reactiveValues(x = NULL, y = NULL)
+output$lineplot <-  renderPlot({
+if(input$act==0){
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price", title = "Cryptocurrency Price Over Time")
+}
+else{
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+ scale_y_log10()+ coord_cartesian(xlim =as.Date(ranges$x, format="%d-%m-%Y",origin = "1970-01-01"), ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price (log)", title = "Cryptocurrency Price Over Time")}
+})
+observeEvent(input$plot1_dblclick, {
+brush <- input$plot1_brush
+class(brush)
+class(input$plot1_brush)
+library(shiny)
+library(shinythemes)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(shinyBS)
+# Define UI
+ui <- fluidPage(theme = shinytheme("paper"),
+titlePanel("Cryptocurrency Price Index"),
+sidebarLayout(
+sidebarPanel(
+# Select type of trend to plot
+selectInput(inputId = "type", label = strong("First Cryptocurrency"),
+choices = unique(top_25_table$crypto_name),
+selected = "Bitcoin"),
+selectInput(inputId = "type1", label = strong("Second Cryptocurrency"),
+choices = c('None',unique(top_25_table$crypto_name)),
+),
+# Select date range to be plotted
+dateRangeInput("date", strong("Date range"), start = "2013-04-28", end = "2017-10-30",
+min = "2013-04-28", max = "2017-10-30"),
+bsButton("act","log scale",icon("refresh"),style = "primary",
+type = "toggle",value = F),
+radioButtons("rad","Currency:",list("USD","INR")),
+width = 3
+),
+# Output: Description, lineplot, and reference
+mainPanel(
+plotOutput(outputId = "lineplot", height = "700px",dblclick = "plot1_dblclick",width = "1000px",
+brush = brushOpts(
+id = "plot1_brush",
+resetOnNew = TRUE
+))
+)
+)
+)
+# Define server function
+server <- function(input, output) {
+# Subset data
+selected_trends <- reactive({
+req(input$date)
+req(input$type)
+req(input$type1)
+validate(need(!is.na(input$date[1]) & !is.na(input$date[2]), "Error: Please provide both a start and an end date."))
+validate(need(input$date[1] < input$date[2], "Error: Start date should be earlier than end date."))
+# validate(need(input$type1!=input$type,"Error:Select Different Cryptocurrencies to Compare"))
+top_25_table %>%select(crypto_name,Date,Close)%>%
+filter(Date>as.Date(input$date[1],format="%d-%m-%Y") & Date < as.Date(input$date[2],format="%d-%m-%Y"),crypto_name==input$type|crypto_name==input$type1)
+})
+#Create scatterplot object the plotOutput function is expecting
+ranges <- reactiveValues(x = NULL, y = NULL)
+output$lineplot <-  renderPlot({
+if(input$act==0){
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price", title = "Cryptocurrency Price Over Time")
+}
+else{
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+ scale_y_log10()+ coord_cartesian(xlim =as.Date(ranges$x, format="%d-%m-%Y",origin = "1970-01-01"), ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price (log)", title = "Cryptocurrency Price Over Time")}
+})
+library(shiny)
+library(shinythemes)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(shinyBS)
+# Define UI
+ui <- fluidPage(theme = shinytheme("paper"),
+titlePanel("Cryptocurrency Price Index"),
+sidebarLayout(
+sidebarPanel(
+# Select type of trend to plot
+selectInput(inputId = "type", label = strong("First Cryptocurrency"),
+choices = unique(top_25_table$crypto_name),
+selected = "Bitcoin"),
+selectInput(inputId = "type1", label = strong("Second Cryptocurrency"),
+choices = c('None',unique(top_25_table$crypto_name)),
+),
+# Select date range to be plotted
+dateRangeInput("date", strong("Date range"), start = "2013-04-28", end = "2017-10-30",
+min = "2013-04-28", max = "2017-10-30"),
+bsButton("act","log scale",icon("refresh"),style = "primary",
+type = "toggle",value = F),
+radioButtons("rad","Currency:",list("USD","INR")),
+width = 3
+),
+# Output: Description, lineplot, and reference
+mainPanel(
+plotOutput(outputId = "lineplot", height = "700px",dblclick = "plot1_dblclick",width = "1000px",
+brush = brushOpts(
+id = "plot1_brush",
+resetOnNew = TRUE
+))
+)
+)
+)
+# Define server function
+server <- function(input, output) {
+# Subset data
+selected_trends <- reactive({
+req(input$date)
+req(input$type)
+req(input$type1)
+validate(need(!is.na(input$date[1]) & !is.na(input$date[2]), "Error: Please provide both a start and an end date."))
+validate(need(input$date[1] < input$date[2], "Error: Start date should be earlier than end date."))
+# validate(need(input$type1!=input$type,"Error:Select Different Cryptocurrencies to Compare"))
+top_25_table %>%select(crypto_name,Date,Close)%>%
+filter(Date>as.Date(input$date[1],format="%d-%m-%Y") & Date < as.Date(input$date[2],format="%d-%m-%Y"),crypto_name==input$type|crypto_name==input$type1)
+})
+#Create scatterplot object the plotOutput function is expecting
+ranges <- reactiveValues(x = NULL, y = NULL)
+output$lineplot <-  renderPlot({
+if(input$act==0){
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price", title = "Cryptocurrency Price Over Time")
+}
+else{
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+ scale_y_log10()+ coord_cartesian(xlim =as.Date(ranges$x, format="%d-%m-%Y",origin = "1970-01-01"), ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price (log)", title = "Cryptocurrency Price Over Time")}
+})
+observeEvent(input$plot1_dblclick, {
+brush <- input$plot1_brush
+if (!is.null(brush)) {
+ranges$x <- c(brush$xmin,brush$xmax)
+ranges$y <- c(brush$ymin, brush$ymax)
+} else {
+ranges$x <- NULL
+ranges$y <- NULL
+}
+})
+}
+class(input$plot1_brush)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+View(server)
+View(server)
+View(server)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+library(shiny)
+library(shinythemes)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(shinyBS)
+# Define UI
+ui <- fluidPage(theme = shinytheme("paper"),
+titlePanel("Cryptocurrency Price Index"),
+sidebarLayout(
+sidebarPanel(
+# Select type of trend to plot
+selectInput(inputId = "type", label = strong("First Cryptocurrency"),
+choices = unique(top_25_table$crypto_name),
+selected = "Bitcoin"),
+selectInput(inputId = "type1", label = strong("Second Cryptocurrency"),
+choices = c('None',unique(top_25_table$crypto_name)),
+),
+# Select date range to be plotted
+dateRangeInput("date", strong("Date range"), start = "2013-04-28", end = "2017-10-30",
+min = "2013-04-28", max = "2017-10-30"),
+bsButton("act","log scale",icon("refresh"),style = "primary",
+type = "toggle",value = F),
+radioButtons("rad","Currency:",list("USD","INR")),
+width = 3
+),
+# Output: Description, lineplot, and reference
+mainPanel(
+plotOutput(outputId = "lineplot", height = "700px",dblclick = "plot1_dblclick",width = "1000px",
+brush = brushOpts(
+id = "plot1_brush",
+resetOnNew = TRUE
+))
+)
+)
+)
+# Define server function
+server <- function(input, output) {
+# Subset data
+selected_trends <- reactive({
+req(input$date)
+req(input$type)
+req(input$type1)
+validate(need(!is.na(input$date[1]) & !is.na(input$date[2]), "Error: Please provide both a start and an end date."))
+validate(need(input$date[1] < input$date[2], "Error: Start date should be earlier than end date."))
+# validate(need(input$type1!=input$type,"Error:Select Different Cryptocurrencies to Compare"))
+top_25_table %>%select(crypto_name,Date,Close)%>%
+filter(Date>as.Date(input$date[1],format="%d-%m-%Y") & Date < as.Date(input$date[2],format="%d-%m-%Y"),crypto_name==input$type|crypto_name==input$type1)
+})
+#Create scatterplot object the plotOutput function is expecting
+ranges <- reactiveValues(x = NULL, y = NULL)
+output$lineplot <-  renderPlot({
+if(input$act==0){
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price", title = "Cryptocurrency Price Over Time")
+}
+else{
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+ scale_y_log10()+ coord_cartesian(xlim =ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price (log)", title = "Cryptocurrency Price Over Time")}
+})
+observeEvent(input$plot1_dblclick, {
+brush <- input$plot1_brush
+input$plot1_brush
+if (!is.null(brush)) {
+ranges$x <- c(as.Date(brush$xmin,format="%d-%m-%Y",  origin = "1970-01-01" ),as.Date(brush$xmax,format="%d-%m-%Y", origin = "1970-01-01"))
+ranges$y <- c(brush$ymin, brush$ymax)
+} else {
+ranges$x <- NULL
+ranges$y <- NULL
+}
+})
+}
+library(shiny)
+library(shinythemes)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(shinyBS)
+# Define UI
+ui <- fluidPage(theme = shinytheme("paper"),
+titlePanel("Cryptocurrency Price Index"),
+sidebarLayout(
+sidebarPanel(
+# Select type of trend to plot
+selectInput(inputId = "type", label = strong("First Cryptocurrency"),
+choices = unique(top_25_table$crypto_name),
+selected = "Bitcoin"),
+selectInput(inputId = "type1", label = strong("Second Cryptocurrency"),
+choices = c('None',unique(top_25_table$crypto_name)),
+),
+# Select date range to be plotted
+dateRangeInput("date", strong("Date range"), start = "2013-04-28", end = "2017-10-30",
+min = "2013-04-28", max = "2017-10-30"),
+bsButton("act","log scale",icon("refresh"),style = "primary",
+type = "toggle",value = F),
+radioButtons("rad","Currency:",list("USD","INR")),
+width = 3
+),
+# Output: Description, lineplot, and reference
+mainPanel(
+plotOutput(outputId = "lineplot", height = "700px",dblclick = "plot1_dblclick",width = "1000px",
+brush = brushOpts(
+id = "plot1_brush",
+resetOnNew = TRUE
+))
+)
+)
+)
+# Define server function
+server <- function(input, output) {
+# Subset data
+selected_trends <- reactive({
+req(input$date)
+req(input$type)
+req(input$type1)
+validate(need(!is.na(input$date[1]) & !is.na(input$date[2]), "Error: Please provide both a start and an end date."))
+validate(need(input$date[1] < input$date[2], "Error: Start date should be earlier than end date."))
+# validate(need(input$type1!=input$type,"Error:Select Different Cryptocurrencies to Compare"))
+top_25_table %>%select(crypto_name,Date,Close)%>%
+filter(Date>as.Date(input$date[1],format="%d-%m-%Y") & Date < as.Date(input$date[2],format="%d-%m-%Y"),crypto_name==input$type|crypto_name==input$type1)
+})
+#Create scatterplot object the plotOutput function is expecting
+ranges <- reactiveValues(x = NULL, y = NULL)
+output$lineplot <-  renderPlot({
+if(input$act==0){
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price", title = "Cryptocurrency Price Over Time")
+}
+else{
+ggplot(selected_trends(),aes(Date,as.numeric(Close),colour=crypto_name)) +
+geom_line()+ scale_y_log10()+ coord_cartesian(xlim =ranges$x, ylim = ranges$y, expand = FALSE)+
+labs (x = "Date", y = "Price (log)", title = "Cryptocurrency Price Over Time")}
+})
+observeEvent(input$plot1_dblclick, {
+brush <- input$plot1_brush
+print(input$plot1_brush)
+if (!is.null(brush)) {
+ranges$x <- c(as.Date(brush$xmin,format="%d-%m-%Y",  origin = "1970-01-01" ),as.Date(brush$xmax,format="%d-%m-%Y", origin = "1970-01-01"))
+ranges$y <- c(brush$ymin, brush$ymax)
+} else {
+ranges$x <- NULL
+ranges$y <- NULL
+}
+})
+}
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+top_25 = function()
+{
+rm(list = ls())
+options(scipen  = 999)
+library(quantmod)
+CryptoDir = c('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny')
+setwd(CryptoDir)
+DestFile = paste0(CryptoDir,"masterdata.zip")
+download.file(url="http://183.82.112.85:6262/media/datasets/masterdata.zip", destfile=DestFile)
+unzip_files = unzip(zipfile=DestFile, overwrite=TRUE)
+output = readRDS(unzip_files[[1]])
+master_data = output[[1]]
+CoinPriceList = output[[2]]
+SummaryFile = output[[3]]
+SummaryFile = SummaryFile[order(SummaryFile$MarketCap,decreasing = TRUE),]
+top_25_currencies = head(SummaryFile$Name,n = 25)
+top_25 = master_data[master_data$unique_name %in% top_25_currencies,]
+getSymbols("INR",from = "2013-04-26")
+inr_rate = as.data.frame(coredata(INR))
+inr_rate["date"] = index(INR)
+required_dates = as.data.frame(unique(master_data$Date))
+required_dates = as.data.frame(required_dates[order(required_dates[,1],decreasing = FALSE),])
+colnames(required_dates) = "date"
+required_dates = merge(required_dates,inr_rate,by.x = "date",by.y = "date",all = TRUE)
+required_dates = na.locf(required_dates)
+required_dates = required_dates[,c("date","INR.Close")]
+required_dates = required_dates[2:nrow(required_dates),]
+required_dates$date = as.Date(required_dates$date,format = "%Y-%m-%d")
+required_dates$INR.Close = as.numeric(required_dates$INR.Close)
+top_25 = merge(top_25,required_dates,by.x = "Date",by.y = "date",all = TRUE)
+top_25["Close_INR"] = top_25$Close * top_25$INR.Close
+colnames(top_25)[8] = "crypto_name"
+return(top_25)
+}
+View(top_25)
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+View(top_25)
+View(top_25)
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25 = top_25()
+save.image("C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/top_25.RData")
+View(top_25)
+View(top_25)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25_table = top_25()
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+View(top_25_table)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+unique(min(top_25_table$Date))
+unique(max(top_25_table$Date))
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+getSymbols("USD/INR")
+getSymbols("USD\INR")
+getSymbols("USD/INR")
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+print(source('C:/Users/Jaideep Reddy/Downloads/shiny original.R')$value)
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25_table = top_25()
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25_table = top_25()
+top_25_table = top_25()
+save.image("C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/top_25_table.RData")
+library(shiny); print(source('shiny original.R')$value)
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25_table = top_25()
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25_table = top_25()
+View(top_25_table)
+print(source('shiny original.R')$value)
+print(source('shiny original.R')$value)
+print(source('shiny1.R')$value)
+print(source('shiny original.R')$value)
+library(lubridate)
+print(source('shiny original.R')$value)
+print(source('shiny original.R')$value)
+print(source('shiny original.R')$value)
+print(source('shiny1.R')$value)
+print(source('shiny1.R')$value)
+print(source('shiny original.R')$value)
+source('C:\\Users\\Jaideep Reddy\\Desktop\\INSOFE\\Crypto Proj\\Shiny\\top_25.R')
+top_25_table = top_25()
+save.image("C:/Users/Jaideep Reddy/Desktop/INSOFE/Crypto Proj/Shiny/top_25_table.RData")
+library(shiny); print(source('shiny original.R')$value)
